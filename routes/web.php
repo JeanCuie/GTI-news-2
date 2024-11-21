@@ -8,12 +8,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
+
+
+    $noticias = Noticia::orderBy('id', 'desc')->paginate(6);
+    
+    return view('home', compact('noticias'));
+
     return view('home');
 })->name('home');
-route::view('/teste', 'tela-teste');
 
+
+route::view('/teste', 'tela-teste');
 route::view('/cadastro', 'tela-cadastro')->name('telaCadastro');
 route::view('/login', 'login')->name('login');
+
 
 route::get('/logout',
      function(Request $request){
@@ -64,11 +72,11 @@ route::post( '/salva-usuario',
 Route::get('/gerencia-noticias',
 function(){
 
-    $noticias = Noticia::orderBy('id', 'desc')->get();
+    $noticias = Noticia::orderBy('id', 'desc')->paginate(6);;
     return view('gerencia-noticias', compact('noticias'));
 }
 
-)->name('gerenciaNoticias');
+)->name('gerenciaNoticias')->middleware('auth');
 
 Route::get('/cadastra-noticia',
 function(){
@@ -77,21 +85,8 @@ function(){
     return view('cadastra-noticia', compact('noticia'));
 }
 
-)->name('cadastraNoticia');
+)->name('cadastraNoticia')->middleware('auth');
 
-route::post( '/salva-noticia', 
-    function(Request $request){
-        dd($request);
-        // $user = new User();
-        // $user->name =$request->nome;
-        // $user->email =$request->email;
-        // $user->password =$request->senha;
-        // $user->save();
-
-        return redirect()->route('home');
-    }
-)
-->name('SalvaNoticia');
 
 route::post( '/salva-noticia', 
     function(Request $request){
@@ -110,7 +105,7 @@ route::post( '/salva-noticia',
         return redirect()->route('gerenciaNoticias');
     }
 )
-->name('SalvaNoticia');
+->name('SalvaNoticia')->middleware('auth');
 
 route::get(
     '/exibe-noticia/{noticia}',
@@ -133,7 +128,7 @@ route::get(
         return view('edita-noticia', compact('noticia'));
     }
 
-)->name('editaNoticia');
+)->name('editaNoticia')->middleware('auth');
 
 
 route::post( '/altera-noticia/{noticia}',
@@ -165,4 +160,12 @@ route::get(
         return redirect()->route('gerenciaNoticias');
     }
 
-)->name('deletaNoticia');
+)->name('deletaNoticia')->middleware('auth');
+
+
+Route::get(
+    '/noticia', function () {
+
+    return view('noticia');
+
+})->name('noticia');
