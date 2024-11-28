@@ -169,3 +169,32 @@ Route::get(
     return view('noticia');
 
 })->name('noticia');
+
+Route::get(
+    '/sobreocurso', function () {
+
+    return view('sobre-o-curso');
+
+})->name('sobreocurso');
+
+Route::get(
+    '/institucional', function () {
+
+    return view('institucional');
+
+})->name('institucional');
+
+Route::get(
+    '/aluno', function () {
+
+    return view('aluno');
+
+})->name('aluno');
+
+Route::get(
+    '/contato', function () {
+
+    return view('contato');
+
+})->name('contato');
+
